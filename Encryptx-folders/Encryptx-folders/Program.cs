@@ -20,6 +20,13 @@ namespace Encryptx_folders
                 
                 Console.WriteLine("Enter Output path ");
                 string output = Console.ReadLine();
+
+                string[] files = Directory.GetFiles(folders); // Get all files in the folder
+
+                 foreach (string file in files)
+                 {
+                 Console.WriteLine(file); // Display each file
+                 }
                 
             }
             else
