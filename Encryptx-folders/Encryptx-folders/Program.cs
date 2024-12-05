@@ -17,7 +17,10 @@ namespace Encryptx_folders
             string folders = Console.ReadLine();
             if(Directory.Exists(folders))
             {
-                Console.WriteLine("Folder exists");
+                
+                Console.WriteLine("Enter Output path ");
+                string output = Console.ReadLine();
+                
             }
             else
             {
