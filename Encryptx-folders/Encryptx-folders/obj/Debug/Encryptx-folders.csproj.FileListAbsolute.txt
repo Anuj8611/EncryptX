@@ -1,0 +1,7 @@
+C:\Users\agaur\source\repos\Encryptx-folders\Encryptx-folders\bin\Debug\Encryptx-folders.exe.config
+C:\Users\agaur\source\repos\Encryptx-folders\Encryptx-folders\bin\Debug\Encryptx-folders.exe
+C:\Users\agaur\source\repos\Encryptx-folders\Encryptx-folders\bin\Debug\Encryptx-folders.pdb
+C:\Users\agaur\source\repos\Encryptx-folders\Encryptx-folders\obj\Debug\Encryptx-folders.csproj.AssemblyReference.cache
+C:\Users\agaur\source\repos\Encryptx-folders\Encryptx-folders\obj\Debug\Encryptx-folders.csproj.CoreCompileInputs.cache
+C:\Users\agaur\source\repos\Encryptx-folders\Encryptx-folders\obj\Debug\Encryptx-folders.exe
+C:\Users\agaur\source\repos\Encryptx-folders\Encryptx-folders\obj\Debug\Encryptx-folders.pdb
