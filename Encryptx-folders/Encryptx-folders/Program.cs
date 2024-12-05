@@ -22,7 +22,7 @@ namespace Encryptx_folders
             else
             {
                 Console.WriteLine("Folder does not exists");
-                
+                Console.Readkey();
             }
 
             Console.ReadLine();
