@@ -13,7 +13,7 @@ namespace Encryptx_folders
         static void Main(string[] args)
 
         {
-            Console.WriteLine("Enter Path of folders");
+            Console.WriteLine("Enter Path of folder");
             string folders = Console.ReadLine();
             if(Directory.Exists(folders))
             {
