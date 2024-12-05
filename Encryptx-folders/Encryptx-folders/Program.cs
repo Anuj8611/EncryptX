@@ -19,6 +19,12 @@ namespace Encryptx_folders
             {
                 Console.WriteLine("Folder exists");
             }
+            else
+            {
+                Console.WriteLine("Folder does not exists");
+                
+            }
+
             Console.ReadLine();
         }
     }
