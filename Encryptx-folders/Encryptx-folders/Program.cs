@@ -13,9 +13,6 @@ namespace Encryptx_folders
 
             if (Directory.Exists(folders))
             {
-                Console.WriteLine("Enter Output path: ");
-                string output = Console.ReadLine();
-                Console.WriteLine();
 
                 string[] files = Directory.GetFiles(folders); // Get all files in the folder
                 Console.WriteLine("**FILES PRESENT IN THE FOLDER**");
@@ -36,8 +33,34 @@ namespace Encryptx_folders
                 }
 
                 Console.WriteLine();
-                Console.WriteLine("Adding files to archive......");
+                Console.WriteLine("Enter Output path: ");
+                string output = Console.ReadLine();
                 Console.WriteLine();
+                Console.WriteLine("Adding files to resource archive......");
+                Console.WriteLine();
+                try
+                {
+                    using (BinaryWriter bw = new BinaryWriter(File.OpenWrite(output)))
+                    {
+                        foreach (string file in files)
+                        {
+                            FileInfo finfo = new FileInfo(file);
+                            string fileName = Path.GetFileName(file);
+                            long fileSize = finfo.Length;
+
+                            bw.Write(fileName);
+
+                        }
+
+                    }
+                    Console.WriteLine("Resource archive created successfully.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
+                
+                
             }
             else
             {
