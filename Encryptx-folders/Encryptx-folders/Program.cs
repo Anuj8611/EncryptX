@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 
 namespace Encryptx_folders
@@ -50,6 +50,8 @@ namespace Encryptx_folders
                         Int32 ab = 0;
                         bw.Write(ab);
 
+                        long totalSize = 4 + 4;
+
                         foreach (string file in files)
                         {
                             FileInfo finfo = new FileInfo(file);
@@ -57,15 +59,28 @@ namespace Encryptx_folders
                             byte[] fileNameBytes = System.Text.Encoding.UTF8.GetBytes(fileName); // Encode filename
                             long fileSize = finfo.Length;
 
-                            // Write filename length (4 bytes)
-                            //bw.Write((Int32)fileNameBytes.Length);
 
-                            // Write filename as raw bytes
+
+                            //Write filename length (4 bytes)
+                            bw.Write((Int32)fileNameBytes.Length);
+
+                            // Write filename as bytes
                             bw.Write(fileNameBytes);
 
                             // Write file size (4 bytes)
                             bw.Write((Int32)fileSize);
+
+                            //Write file bytes
+                            byte[] fileBytes = File.ReadAllBytes(file);
+                            bw.Write(fileBytes);
+
+                            totalSize += 4 + fileNameBytes.Length + 4 + fileSize; // Filename length + filename bytes + file size + file content
                         }
+
+                        stream.Seek(4, SeekOrigin.Begin);
+                        bw.Write((Int32)totalSize);
+
+                        bw.Close();
                     }
 
                     Console.WriteLine("Resource archive created successfully.");
