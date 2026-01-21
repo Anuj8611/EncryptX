@@ -1,0 +1,16 @@
+# binaries
+*.exe
+
+# test / runtime artifacts
+*.enc
+*.jpg
+*.png
+*.mp4
+
+# object files
+*.o
+*.obj
+
+# OS junk
+Thumbs.db
+.DS_Store
