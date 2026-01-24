@@ -1,6 +1,8 @@
 #include "encryptx/engine.h"
-#include <memory>
+#include "encryptx/errors.h"
+
 #include <iostream>
+#include <memory>
 
 using namespace encryptx;
 
@@ -17,20 +19,59 @@ public:
 
     void decrypt(uint8_t *data, size_t len) override
     {
-        encrypt(data, len);
+        encrypt(data, len); // XOR is symmetric
     }
 
 private:
     uint8_t key_;
 };
 
-int main()
+void print_usage()
 {
-    auto enc = std::make_unique<XOREncryptor>(0xAA);
-    EncryptEngine engine(std::move(enc));
+    std::cout << "Usage:\n"
+              << "  encryptx encrypt <input> <output>\n"
+              << "  encryptx decrypt <input> <output>\n";
+}
 
-    engine.encrypt_file("img.jpg", "img.enc");
-    engine.decrypt_file("img.enc", "img_out.jpg");
+int main(int argc, char *argv[])
+{
+    if (argc != 4)
+    {
+        print_usage();
+        return 1;
+    }
 
-    std::cout << "Done\n";
+    std::string command = argv[1];
+    std::string input = argv[2];
+    std::string output = argv[3];
+
+    try
+    {
+        auto enc = std::make_unique<XOREncryptor>(0xAA);
+        EncryptEngine engine(std::move(enc));
+
+        if (command == "encrypt")
+        {
+            engine.encrypt_file(input, output);
+            std::cout << "Encryption completed successfully\n";
+        }
+        else if (command == "decrypt")
+        {
+            engine.decrypt_file(input, output);
+            std::cout << "Decryption completed successfully\n";
+        }
+        else
+        {
+
+            print_usage();
+            return 1;
+        }
+    }
+    catch (const EncryptXError &e)
+    {
+        std::cerr << "EncryptX error: " << e.what() << "\n";
+        return 1;
+    }
+
+    return 0;
 }
