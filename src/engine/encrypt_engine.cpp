@@ -8,6 +8,8 @@
 #include <vector>
 #include <cstring>
 
+#include <filesystem>
+
 namespace encryptx
 {
 
@@ -15,7 +17,8 @@ namespace encryptx
         : encryptor_(std::move(enc)) {}
 
     void EncryptEngine::encrypt_file(const std::string &input,
-                                     const std::string &output)
+                                     const std::string &output,
+                                     ProgressCallback cb)
     {
         std::ifstream in(input, std::ios::binary);
         if (!in)
@@ -36,12 +39,19 @@ namespace encryptx
         std::vector<uint8_t> buffer(DEFAULT_CHUNK_SIZE);
         uint64_t chunkIndex = 0;
 
+        uint64_t totalBytes = std::filesystem::file_size(input);
+        uint64_t processedBytes = 0;
+
         while (true)
         {
             in.read(reinterpret_cast<char *>(buffer.data()), buffer.size());
             std::streamsize bytes = in.gcount();
             if (bytes == 0)
                 break;
+
+            processedBytes += bytes;
+            if (cb)
+                cb(processedBytes, totalBytes);
 
             ChunkHeader ch{};
             ch.index = chunkIndex;

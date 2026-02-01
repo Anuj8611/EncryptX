@@ -33,6 +33,13 @@ void print_usage()
               << "  encryptx decrypt <input> <output>\n";
 }
 
+void progress_bar(uint64_t done, uint64_t total)
+{
+    int percent = static_cast<int>((done * 100) / total);
+    std::cout << "\rProgress: " << percent << "%";
+    std::cout.flush();
+}
+
 int main(int argc, char *argv[])
 {
     if (argc != 4)
@@ -52,13 +59,13 @@ int main(int argc, char *argv[])
 
         if (command == "encrypt")
         {
-            engine.encrypt_file(input, output);
-            std::cout << "Encryption completed successfully\n";
+            engine.encrypt_file(input, output, progress_bar);
+            std::cout << "\nEncryption completed successfully\n";
         }
         else if (command == "decrypt")
         {
-            engine.decrypt_file(input, output);
-            std::cout << "Decryption completed successfully\n";
+            engine.decrypt_file(input, output, progress_bar);
+            std::cout << "\nDecryption completed successfully\n";
         }
         else
         {

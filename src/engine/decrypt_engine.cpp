@@ -7,11 +7,14 @@
 #include <vector>
 #include <cstring>
 
+#include <filesystem>
+
 namespace encryptx
 {
 
     void EncryptEngine::decrypt_file(const std::string &input,
-                                     const std::string &output)
+                                     const std::string &output,
+                                     ProgressCallback cb)
     {
         // ---- open encrypted file ----
         std::ifstream in(input, std::ios::binary);
@@ -43,6 +46,9 @@ namespace encryptx
 
         // ---- allocate buffer using chunk size from header ----
         std::vector<uint8_t> buffer(fileHeader.chunk_size);
+
+        uint64_t totalBytes = std::filesystem::file_size(input);
+        uint64_t processedBytes = 0;
 
         // ---- process chunks ----
         for (uint64_t i = 0; i < fileHeader.total_chunks; ++i)
@@ -91,7 +97,11 @@ namespace encryptx
             encryptor_->decrypt(buffer.data(), ch.data_size);
             out.write(reinterpret_cast<char *>(buffer.data()), ch.data_size);
 
-            if (!out)
+            processedBytes += ch.data_size;
+            if (cb)
+                cb(processedBytes, totalBytes);
+
+                        if (!out)
             {
                 throw IOError("Failed to write output data at chunk " +
                               std::to_string(ch.index));
