@@ -4,6 +4,9 @@
 #include <iostream>
 #include <memory>
 
+#include <chrono>
+#include <filesystem>
+
 using namespace encryptx;
 
 class XOREncryptor : public Encryptor
@@ -29,8 +32,11 @@ private:
 void print_usage()
 {
     std::cout << "Usage:\n"
-              << "  encryptx encrypt <input> <output>\n"
-              << "  encryptx decrypt <input> <output>\n";
+                 "  encryptx encrypt [--chunk-size N] <input> <output>\n"
+                 "  encryptx decrypt [--chunk-size N] <input> <output>\n"
+                 "\n"
+                 "Options:\n"
+                 "  --chunk-size N   Chunk size in MB (default: 4)\n";
 }
 
 void progress_bar(uint64_t done, uint64_t total)
@@ -59,8 +65,21 @@ int main(int argc, char *argv[])
 
         if (command == "encrypt")
         {
+            auto start = std::chrono::high_resolution_clock::now();
+
             engine.encrypt_file(input, output, progress_bar);
+
+            auto end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> elapsed = end - start;
+
+            double seconds = elapsed.count();
+            double fileMB =
+                std::filesystem::file_size(input) / (1024.0 * 1024.0);
+            double throughput = fileMB / seconds;
+
             std::cout << "\nEncryption completed successfully\n";
+            std::cout << "Time: " << seconds << " sec\n";
+            std::cout << "Throughput: " << throughput << " MB/s\n";
         }
         else if (command == "decrypt")
         {
